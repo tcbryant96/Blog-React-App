@@ -1,24 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
+import Navbar from "./components/Navbar";
+import LoginCard from "./components/LoginCard";
+import React, { useState } from "react";
+import AlertMessage from "./components/AlertMessage";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
+
+import "./App.css";
+
+import Home from "./components/Home";
+import MyProfile from "./components/MyProfile";
+import {Button, Modal} from 'react-bootstrap'
+import ProfileSettings from "./components/ProfileSettings";
 function App() {
+  const [message, setMessage] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(
+    localStorage.getItem("token") ? true : false
+  );
+  const [isOpen, setIsOpen] = useState(false)
+
+ 
+
+  let navigate = useNavigate()
+  const flashMessage = (message, category) => {
+    setMessage(message);
+    setCategory(category);
+  };
+  const login = async (u) => {
+    setLoggedIn(true);
+    let token = localStorage.token;
+    let myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Bearer ' + token)
+    const fetchData = async () => {
+        const response = await fetch('https://kekambas-blog.herokuapp.com/auth/me', { headers: myHeaders })
+        if (response.ok) {
+            let data = await response.json()
+            localStorage.setItem('username', data.username)
+        }
+    }
+    fetchData()
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem('username')
+    setLoggedIn(false);
+    navigate('/')
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+
+      <Navbar logout={logout} />
+
+      {message ? (
+        <AlertMessage
+          message={message}
+          category={category}
+          flashMessage={flashMessage}
+        />
+      ) : null}
+      <Routes>
+        {loggedIn ? (
+          <Route
+            path="/"
+            element={<Home flashMessage={flashMessage} login={login}/>}
+          />
+        ) : (
+          <Route
+            path="/"
+            element={<LoginCard flashMessage={flashMessage} login={login} />}
+          />
+        )}
+        <Route
+          path="/profile"
+          element={<MyProfile flashMessage={flashMessage} />}
+        />
+        <Route
+        path="/profile/settings"
+        element={<ProfileSettings/>}
+        />
+      </Routes>
+    </>
   );
 }
 
