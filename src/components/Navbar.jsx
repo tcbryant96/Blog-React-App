@@ -1,9 +1,18 @@
 import React from 'react'
-import {Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+
 export default function Navbar(props) {
+  let navigate = useNavigate()
   const handleLogout = e => {
     e.preventDefault()
     props.logout()
+  }
+  const handleSearch = e => {
+    e.preventDefault()
+    let userSearch = e.target.search.value
+    localStorage.setItem("userSearch", userSearch)
+    navigate('/userSearch')
+    window.location.reload(false)
   }
   return (
     <>
@@ -23,16 +32,16 @@ export default function Navbar(props) {
                   Dropdown
                 </a>
                 <ul className="dropdown-menu">
-                <Link className='dropdown-item'  to="/profile"> My Profile</Link>
-                <Link className='dropdown-item'  to="/profile/settings">Settings</Link>
-                  
-                  <Link className='dropdown-item'  to="/" onClick={handleLogout}> Logout</Link>
-                  
+                  <Link className='dropdown-item' to="/profile"> My Profile</Link>
+                  <Link className='dropdown-item' to="/profile/settings">Settings</Link>
+
+                  <Link className='dropdown-item' to="/" onClick={handleLogout}> Logout</Link>
+
                 </ul>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search by user..." aria-label="Search"></input>
+            <form className="d-flex" role="search" onSubmit={handleSearch}>
+              <input className="form-control me-2" id="search" type="search" placeholder="Search by user..." aria-label="Search"></input>
               <button className="btn btn-success" type="submit">Search</button>
             </form>
           </div>

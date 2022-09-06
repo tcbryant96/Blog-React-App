@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Register from './Register';
+import { Button, Modal } from "react-bootstrap";
 
 
-export default function login(props) {
 
+export default function Login(props) {
+    
+    const [modal, setModal] = useState(false)
+
+    const modalSetFalse = () =>{
+        setModal(false)
+    }
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -34,6 +41,7 @@ export default function login(props) {
 
 
     }
+    
     return (
         <>
 
@@ -51,28 +59,21 @@ export default function login(props) {
 
                 </div>
             </form>
-            <button type="button" className="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#registerModal">
-                Create An Account
-            </button>
+           <Button className='btn-success container-fluid mt-3' onClick={() => setModal(true)}>
+            Create An Account
+           </Button>
 
-
-            <div className="modal fade" id="registerModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="registerModal">Sign Up!</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <Register flashMessage={props.flashMessage} />
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={modal}>
+                <Modal.Title>Sign Up!</Modal.Title>
+                <Modal.Body>
+                    <Register flashMessage={props.flashMessage} modalSetFalse={modalSetFalse} />
+                </Modal.Body>
+            <Modal.Footer>
+                <Button className='btn-danger' onClick={() => setModal(false)}>
+                    Close
+                </Button>
+            </Modal.Footer>
+            </Modal>
 
         </>
     )

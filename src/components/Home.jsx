@@ -13,9 +13,9 @@ export default function Home(props) {
                 </div>
                 <div className="col">
                     <div className="row">
-                        <CreatePost flashMessage={props.flashMessage}/>
+                        <CreatePost flashMessage={props.flashMessage} />
                     </div>
-                    <ViewPost flashMessage={props.flashMessage}/>
+                    <ViewPost flashMessage={props.flashMessage} />
                 </div>
             </div>
         </div>

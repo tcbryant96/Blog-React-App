@@ -4,24 +4,22 @@ import React, { useState } from "react";
 import AlertMessage from "./components/AlertMessage";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-
 import "./App.css";
 
 import Home from "./components/Home";
 import MyProfile from "./components/MyProfile";
-import {Button, Modal} from 'react-bootstrap'
+import { Button, Modal } from "react-bootstrap";
 import ProfileSettings from "./components/ProfileSettings";
+import UserProfile from "./components/UserProfile";
 function App() {
   const [message, setMessage] = useState(null);
   const [category, setCategory] = useState(null);
   const [loggedIn, setLoggedIn] = useState(
     localStorage.getItem("token") ? true : false
   );
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
- 
-
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const flashMessage = (message, category) => {
     setMessage(message);
     setCategory(category);
@@ -30,26 +28,29 @@ function App() {
     setLoggedIn(true);
     let token = localStorage.token;
     let myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + token)
+    myHeaders.append("Authorization", "Bearer " + token);
     const fetchData = async () => {
-        const response = await fetch('https://kekambas-blog.herokuapp.com/auth/me', { headers: myHeaders })
-        if (response.ok) {
-            let data = await response.json()
-            localStorage.setItem('username', data.username)
-        }
-    }
-    fetchData()
+      const response = await fetch(
+        "https://kekambas-blog.herokuapp.com/auth/me",
+        { headers: myHeaders }
+      );
+      if (response.ok) {
+        let data = await response.json();
+        localStorage.setItem("username", data.username);
+      }
+    };
+    fetchData();
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem('username')
+    localStorage.removeItem("username");
+    localStorage.removeItem("userSearch")
     setLoggedIn(false);
-    navigate('/')
+    navigate("/");
   };
   return (
     <>
-
       <Navbar logout={logout} />
 
       {message ? (
@@ -63,7 +64,7 @@ function App() {
         {loggedIn ? (
           <Route
             path="/"
-            element={<Home flashMessage={flashMessage} login={login}/>}
+            element={<Home flashMessage={flashMessage} login={login} />}
           />
         ) : (
           <Route
@@ -76,9 +77,10 @@ function App() {
           element={<MyProfile flashMessage={flashMessage} />}
         />
         <Route
-        path="/profile/settings"
-        element={<ProfileSettings/>}
+          path="/profile/settings"
+          element={<ProfileSettings flashMessage={flashMessage} />}
         />
+        <Route path="/userSearch" element={<UserProfile />} />
       </Routes>
     </>
   );

@@ -14,7 +14,7 @@ export default function MyProfile(props) {
                     <div className="row">
                         <CreatePost flashMessage={props.flashMessage}/>
                     </div>
-                    <MyPost/>
+                    <MyPost flashMessage={props.flashMessage}/>
                 </div>
             </div>
         </div>
