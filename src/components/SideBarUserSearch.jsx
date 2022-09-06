@@ -1,6 +1,5 @@
 import React from 'react'
 import logo from '../images/profile pic.jpg'
-import { Link } from "react-router-dom"
 
 
 export default function SideBarUserSearch() {

@@ -15,9 +15,6 @@ export default function MyPost(props) {
         fetch(` https://kekambas-blog.herokuapp.com/blog/posts`)
             .then(res => res.json())
             .then(data => {
-                console.log(localStorage)
-                let username = localStorage.userSearch 
-                console.log(username)
                 let newData = data.filter(data => data.author.username === localStorage.username)
                 setPosts(newData)
                 setUpdate(null)
@@ -29,7 +26,6 @@ export default function MyPost(props) {
         let response = await fetch(` https://kekambas-blog.herokuapp.com/blog/posts/${id}`)
         if (response.ok) {
             let data = await response.json()
-            console.log(data)
             setModalHeader('Edit Post')
             let title = data.title
 
@@ -44,7 +40,6 @@ export default function MyPost(props) {
     const handleDelete = async e => {
         e.preventDefault()
         setModal(true)
-        console.log("delete")
         setModalHeader('Delete Post')
         setPostId(e.target.id)
     }
@@ -85,7 +80,6 @@ export default function MyPost(props) {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.error) {
                     console.error(data.error)
                 } else {
@@ -102,12 +96,10 @@ export default function MyPost(props) {
     const handleViewPost = async e => {
         e.preventDefault()
         setModalHeader("Post")
-        let id = e.target.id 
-        console.log(id)
+        let id = e.target.id
         let response = await fetch(` https://kekambas-blog.herokuapp.com//blog/posts/${id}`)
-        if (response.ok){
+        if (response.ok) {
             let data = await response.json()
-            console.log(data)
             let username = data.author.username
             setModalHeader(`Created by: ${username}`)
             let title = data.title
@@ -121,82 +113,84 @@ export default function MyPost(props) {
 
     return (
         <>
-        {posts.map((post, idx) => {
-            return (
+            {posts.map((post, idx) => {
+                return (
 
-                <div key={idx} className="card mt-3 col border-secondary">
-                    <div className="card-header">{post.author.username}</div>
-                    <div className="card-body">
-                        <h5 className="card-title">{post.title}</h5>
-                        
-                        <p className="card-text">{post.content}</p>
-                        <div className='d-flex justify-content-between'>
-                            <Button className="btn btn-primary w-25" id={post.id} onClick={handleViewPost}>View Post</Button>
-                            {post.author.username === localStorage.username ?
-                                <>
+                    <div key={idx} className="card mt-3 col border-secondary">
+                        <div className="card-header">{post.author.username}</div>
+                        <div className="card-body text-center">
+                            <h5 className="card-title">{post.title}</h5>
 
-                                    <Button id={post.id} onClick={handleModal} className="btn-success w-25">Edit Post</Button>
-                                    
+                            <p className="card-text">{post.content}</p>
+                            <div className='d-flex justify-content-end'>
+                                <Button className="btn btn-primary w-25 me-4" id={post.id} onClick={handleViewPost}>View Post</Button>
+                                {post.author.username === localStorage.username ?
+                                    <>
 
-                                    <Button className="btn btn-danger" onClick={handleDelete} id={post.id}>Delete Post</Button>
-                                </>
-                                :
-                                null}
-                            <Modal show={modal}>
-                                <Modal.Header >{modalHeader}</Modal.Header>
-                                {modalHeader === "Edit Post" ?
-                                    <Modal.Body>
-                                        <form onSubmit={handleEdit}>
-                                            <input type="text" className='form-control mt-3' id="title" defaultValue={modalTitle} required />
-                                            <div className="mb-3">
-                                                <textarea className="form-control mt-3" defaultValue={modalBody} id="content" rows="4" ></textarea>
-                                            </div>
-                                            <div className='d-flex justify-content-end'>
-                                                <Button className="btn-btn-primary" type="submit">
-                                                    Save Changes
+                                        <Button id={post.id} onClick={handleModal} className="btn-success w-25 me-3">Edit Post</Button>
+
+
+                                        <Button className="btn btn-danger me-1" onClick={handleDelete} id={post.id}>Delete Post</Button>
+                                    </>
+                                    :
+                                    null}
+                                <Modal show={modal}>
+                                    <Modal.Header >{modalHeader}</Modal.Header>
+                                    {modalHeader === "Edit Post" ?
+                                        <Modal.Body>
+                                            <form onSubmit={handleEdit}>
+                                                <input type="text" className='form-control mt-3' id="title" defaultValue={modalTitle} required />
+                                                <div className="mb-3">
+                                                    <textarea className="form-control mt-3" defaultValue={modalBody} id="content" rows="4" ></textarea>
+                                                </div>
+                                                <div className='d-flex justify-content-end'>
+                                                    <Button className="btn-btn-primary" type="submit">
+                                                        Save Changes
+                                                    </Button>
+                                                    <Button className="btn-danger ms-3" onClick={() => setModal(false)}>
+                                                        Cancel edit
+                                                    </Button>
+                                                </div>
+                                            </form>
+
+                                        </Modal.Body>
+                                        : modalHeader === "Delete Post" ? <Modal.Body className='text-center'>Are You Sure You Want to delete post?
+                                            <div className='mt-5 d-flex justify-content-evenly'>
+                                                <Button className="btn btn-primary w-25 " onClick={() => setModal(false)}>
+                                                    Keep Post
                                                 </Button>
-                                                <Button className="btn-danger ms-3" onClick={() => setModal(false)}>
-                                                    Cancel edit
+                                                <Button className='btn btn-danger w-25' onClick={handleConfirmDelete}>
+                                                    Delete Post
                                                 </Button>
                                             </div>
-                                        </form>
+                                        </Modal.Body>
 
-                                    </Modal.Body>
-                                    : modalHeader === "Delete Post" ? <Modal.Body className='text-center'>Are You Sure You Want to delete post?
-                                        <div className='mt-5 d-flex justify-content-evenly'>
-                                            <Button className="btn btn-primary w-25 " onClick={() => setModal(false)}>
-                                                Keep Post
-                                            </Button>
-                                            <Button className='btn btn-danger w-25' onClick={handleConfirmDelete}>
-                                                Delete Post
-                                            </Button>
-                                        </div>
-                                    </Modal.Body>
 
-                            
-                                :
-                                <>
-                                <div className="card">
-                                <Modal.Title className='card-title text-center'>{modalTitle}</Modal.Title>
-                                <Modal.Body className='card-body'>
-                                    {modalBody}
-                                    <div className='text-end'>
-                                    <Button className='btn-danger mt-3' onClick={() => setModal(false)}>
-                                        Close
-                                    </Button>
-                                    </div>
-                                </Modal.Body>
-                                </div>
-                                </>
-                                }
-                            </Modal>
-                            <p className='fw-lighter'>{post.date_created}</p>
+                                            :
+                                            <>
+                                                <div className="card">
+                                                    <Modal.Title className='card-title text-center'>{modalTitle}</Modal.Title>
+                                                    <Modal.Body className='card-body'>
+                                                        {modalBody}
+                                                        <div className='text-end'>
+                                                            <Button className='btn-danger mt-3' onClick={() => setModal(false)}>
+                                                                Close
+                                                            </Button>
+                                                        </div>
+                                                    </Modal.Body>
+                                                </div>
+                                            </>
+                                    }
+                                </Modal>
+                                <p className='fw-lighter text-end'>{post.date_created}</p>
+                            </div>
+
+
                         </div>
                     </div>
-                </div>
 
-            )
-        })}
-    </>
+                )
+            })}
+        </>
     )
 }

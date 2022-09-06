@@ -6,10 +6,10 @@ import { Link } from "react-router-dom"
 
 
 
-export default function SideBar(props) {
+export default function SideBar() {
     return (
         <>
-            <div className=''>
+            <div>
                 <img src={logo} alt="" className='img-fluid' />
                 <h1 className='text-center'>Welcome Back,</h1>
                 <h1 className='text-center'>{localStorage.username}!</h1>

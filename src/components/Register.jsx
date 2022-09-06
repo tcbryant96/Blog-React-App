@@ -5,10 +5,9 @@ import React from 'react'
 
 export default function Register(props) {
 
-  
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('hi')
         let password = e.target.password.value;
         let confirmPass = e.target.confirmPass.value;
         if (password !== confirmPass) {
@@ -41,7 +40,7 @@ export default function Register(props) {
     }
 
     return (
-        <>  
+        <>
 
             <h4 className="text-center">Create Your Account</h4>
             <form onSubmit={handleSubmit}>

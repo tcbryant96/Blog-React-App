@@ -5,10 +5,10 @@ import { Button, Modal } from "react-bootstrap";
 
 
 export default function Login(props) {
-    
+
     const [modal, setModal] = useState(false)
 
-    const modalSetFalse = () =>{
+    const modalSetFalse = () => {
         setModal(false)
     }
 
@@ -41,7 +41,7 @@ export default function Login(props) {
 
 
     }
-    
+
     return (
         <>
 
@@ -59,20 +59,20 @@ export default function Login(props) {
 
                 </div>
             </form>
-           <Button className='btn-success container-fluid mt-3' onClick={() => setModal(true)}>
-            Create An Account
-           </Button>
+            <Button className='btn-success container-fluid mt-3' onClick={() => setModal(true)}>
+                Create An Account
+            </Button>
 
             <Modal show={modal}>
                 <Modal.Title>Sign Up!</Modal.Title>
                 <Modal.Body>
                     <Register flashMessage={props.flashMessage} modalSetFalse={modalSetFalse} />
                 </Modal.Body>
-            <Modal.Footer>
-                <Button className='btn-danger' onClick={() => setModal(false)}>
-                    Close
-                </Button>
-            </Modal.Footer>
+                <Modal.Footer>
+                    <Button className='btn-danger' onClick={() => setModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
         </>

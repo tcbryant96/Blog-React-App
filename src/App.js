@@ -8,7 +8,6 @@ import "./App.css";
 
 import Home from "./components/Home";
 import MyProfile from "./components/MyProfile";
-import { Button, Modal } from "react-bootstrap";
 import ProfileSettings from "./components/ProfileSettings";
 import UserProfile from "./components/UserProfile";
 function App() {
@@ -17,7 +16,6 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(
     localStorage.getItem("token") ? true : false
   );
-  const [isOpen, setIsOpen] = useState(false);
 
   let navigate = useNavigate();
   const flashMessage = (message, category) => {
@@ -45,7 +43,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    localStorage.removeItem("userSearch")
+    localStorage.removeItem("userSearch");
     setLoggedIn(false);
     navigate("/");
   };

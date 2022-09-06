@@ -92,7 +92,6 @@ export default function ProfileSettings(props) {
 
     }
     const handlePassword = async e => {
-        console.log('Hi')
         e.preventDefault()
         let password = e.target.password.value
         let token = localStorage.token
@@ -126,9 +125,7 @@ export default function ProfileSettings(props) {
             method: "DELETE",
             headers: myHeaders
         })
-        console.log(response)
         if (response.ok) {
-            console.log("succes")
             navigate('/')
         }
 

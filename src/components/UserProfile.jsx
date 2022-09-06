@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Modal, Card } from 'react-bootstrap'
-import { Link } from "react-router-dom"
 import SideBarUserSearch from './SideBarUserSearch'
 
 export default function UserProfile(props) {
@@ -16,10 +15,8 @@ export default function UserProfile(props) {
         fetch(` https://kekambas-blog.herokuapp.com/blog/posts`)
             .then(res => res.json())
             .then(data => {
-                console.log(localStorage)
                 let username = localStorage.userSearch
                 let newData = data.filter(data => data.author.username === username)
-                console.log(newData)
                 setPosts(newData)
                 setUpdate(null)
             })
@@ -31,7 +28,6 @@ export default function UserProfile(props) {
         let response = await fetch(` https://kekambas-blog.herokuapp.com/blog/posts/${id}`)
         if (response.ok) {
             let data = await response.json()
-            console.log(data)
             setModalHeader('Edit Post')
             let title = data.title
 
@@ -46,7 +42,6 @@ export default function UserProfile(props) {
     const handleDelete = async e => {
         e.preventDefault()
         setModal(true)
-        console.log("delete")
         setModalHeader('Delete Post')
         setPostId(e.target.id)
     }
@@ -87,7 +82,6 @@ export default function UserProfile(props) {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.error) {
                     console.error(data.error)
                 } else {
@@ -116,11 +110,10 @@ export default function UserProfile(props) {
         e.preventDefault()
         setModalHeader("Post")
         let id = e.target.id
-        console.log(id)
+        
         let response = await fetch(` https://kekambas-blog.herokuapp.com//blog/posts/${id}`)
         if (response.ok) {
             let data = await response.json()
-            console.log(data)
             let username = data.author.username
             setModalHeader(`Created by: ${username}`)
             let title = data.title
@@ -153,7 +146,7 @@ export default function UserProfile(props) {
                                         /> :
                                             <p className="card-text">{post.content}</p>
                                         }
-                                        <div className='d-flex justify-content-between'>
+                                        <div className='d-flex justify-content-center'>
                                             <Button className="btn btn-primary w-25" id={post.id} onClick={handleViewPost}>View Post</Button>
                                             {post.author.username === localStorage.username ?
                                                 <>
@@ -227,8 +220,9 @@ export default function UserProfile(props) {
                                                         </>
                                                 }
                                             </Modal>
-                                            <p className='fw-lighter'>{post.date_created}</p>
-                                        </div>
+                                            </div>
+                                            <p className='fw-lighter text-end'>{post.date_created}</p>
+                                        
                                     </div>
                                 </div>
 

@@ -2,8 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { Button, Modal, Card } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
-import Image from 'react-bootstrap/Image'
-import CardHeader from 'react-bootstrap/esm/CardHeader'
+
 
 export default function ViewPost(props) {
     const [posts, setPosts] = useState([])
@@ -14,12 +13,10 @@ export default function ViewPost(props) {
     const [modalHeader, setModalHeader] = useState(null)
     const [update, setUpdate] = useState(null)
     useEffect(() => {
-        console.log('useeffect')
         fetch(` https://kekambas-blog.herokuapp.com/blog/posts`)
             .then(res => res.json())
             .then(data => {
                 setPosts(data)
-                console.log(data)
             })
         setUpdate(null)
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
@@ -28,11 +25,9 @@ export default function ViewPost(props) {
     const handleModal = async e => {
         e.preventDefault()
         let id = e.target.id
-        console.log(id)
         let response = await fetch(` https://kekambas-blog.herokuapp.com/blog/posts/${id}`)
         if (response.ok) {
             let data = await response.json()
-            console.log(data)
             setModalHeader('Edit Post')
             let title = data.title
 
@@ -47,7 +42,6 @@ export default function ViewPost(props) {
     const handleDelete = async e => {
         e.preventDefault()
         setModal(true)
-        console.log("delete")
         setModalHeader('Delete Post')
         setPostId(e.target.id)
     }
@@ -61,7 +55,6 @@ export default function ViewPost(props) {
             headers: myHeaders
         })
         if (response.ok) {
-            let data = await response.json()
             setModal(false)
             setUpdate('updated')
             props.flashMessage(`Post Deleted`, 'primary')
@@ -89,7 +82,6 @@ export default function ViewPost(props) {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.error) {
                     console.error(data.error)
                 } else {
@@ -112,7 +104,6 @@ export default function ViewPost(props) {
         let response = await fetch(` https://kekambas-blog.herokuapp.com//blog/posts/${id}`)
         if (response.ok) {
             let data = await response.json()
-            console.log(data)
             let username = data.author.username
             setModalHeader(`Created by: ${username}`)
             let title = data.title
@@ -158,12 +149,12 @@ export default function ViewPost(props) {
                             /> :
                                 <p className="card-text">{post.content}</p>
                             }
-                            <div className='d-flex justify-content-center'>
-                                <Button className="btn btn-primary w-25" id={post.id} onClick={handleViewPost}>View Post</Button>
+                            <div className='d-flex justify-content-end'>
+                                <Button className="btn btn-primary w-25 me-5" id={post.id} onClick={handleViewPost}>View Post</Button>
                                 {post.author.username === localStorage.username ?
                                     <>
 
-                                        <Button id={post.id} onClick={handleModal} className="btn-success w-25">Edit Post</Button>
+                                        <Button id={post.id} onClick={handleModal} className="btn-success  me-4">Edit Post</Button>
 
 
                                         <Button className="btn btn-danger" onClick={handleDelete} id={post.id}>Delete Post</Button>
@@ -230,8 +221,9 @@ export default function ViewPost(props) {
                                         </div>
                                     }
                                 </Modal>
+                                <p className='fw-lighter text-end ms-3'>{post.date_created}</p>
                                 </div>
-                                <p className='fw-lighter text-end'>{post.date_created}</p>
+                               
                             
                         </div>
                     </div>
